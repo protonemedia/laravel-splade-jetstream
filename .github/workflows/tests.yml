@@ -1,13 +1,6 @@
 name: tests
 
-on:
-  push:
-    branches:
-      - master
-      - '*.x'
-  pull_request:
-  schedule:
-    - cron: '0 0 * * *'
+on: [push, pull_request]
 
 jobs:
   tests:
@@ -16,13 +9,14 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: ['8.0', 8.1, 8.2]
-        laravel: [9, 10]
+        php: [8.2, 8.1, 8.0]
+        laravel: [10.0, 9.0]
+        dependency-version: [prefer-lowest, prefer-stable]
         exclude:
-          - php: '8.0'
-            laravel: 10
+          - php: "8.0"
+            laravel: 10.0
 
-    name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
+    name: Unit/Feature Tests - P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }}
 
     steps:
       - name: Checkout code
@@ -43,7 +37,7 @@ jobs:
           composer update --prefer-dist --no-interaction --no-progress
 
       - name: Execute tests
-        run: vendor/bin/phpunit
+        run: vendor/bin/phpunit --verbose
 
   stub-tests:
     runs-on: ubuntu-22.04
@@ -51,44 +45,74 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        stack: [inertia, livewire]
+        php: [8.2, 8.1, 8.0]
+        laravel: [10.*, 9.*]
+        dependency-version: [prefer-lowest, prefer-stable]
+        exclude:
+          - php: 8.0
+            laravel: 10.*
 
-    name: Test Stubs (${{ matrix.stack }})
+    name: Dusk Tests - P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }}
 
     steps:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
-          extensions: dom, curl, libxml, mbstring, zip
-          ini-values: error_reporting=E_ALL
-          tools: composer:v2
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, mysql, mysqli, pdo_mysql, fileinfo
           coverage: none
 
       - name: Setup Laravel
         run: |
-          composer create-project laravel/laravel:10.x-dev .
-          composer require laravel/jetstream:* --no-interaction --no-update
-          composer config repositories.jetstream '{"type": "path", "url": "jetstream"}' --file composer.json
+          composer create-project laravel/laravel:^9.3 .
+          composer require protonemedia/laravel-splade
+          composer require laravel/jetstream
+
+      - name: Remove installed Jetstream
+        run: rm -rf vendor/laravel/jetstream
 
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
         with:
-          path: 'jetstream'
+          path: "vendor/laravel/jetstream"
 
-      - name: Install Jetstream
+      - name: Install Jetstream and Setup Dusk environment
         run: |
-          composer update "laravel/jetstream" --prefer-dist --no-interaction --no-progress -W
-          php artisan jetstream:install ${{ matrix.stack }} --teams --api --verification --pest
+          composer dump
+          php artisan jetstream:install --teams --api --verification
+          sed -i -e 's/waitSeconds = 5/waitSeconds = 10/g' vendor/laravel/dusk/src/Browser.php
+          php artisan dusk:chrome-driver `/opt/google/chrome/chrome --version | cut -d " " -f3 | cut -d "." -f1`
 
-      - name: Install NPM dependencies
-        run: npm i
+      - name: Start Chrome Driver
+        run: ./vendor/laravel/dusk/bin/chromedriver-linux &
 
-      - name: Compile assets
-        run: npm run build
+      - name: Run Laravel Server
+        run: php artisan serve &
 
-      - name: Execute tests
-        run: vendor/bin/pest
-        env:
-          DB_CONNECTION: sqlite
-          DB_DATABASE: ":memory:"
+      - name: Run Dusk Tests
+        uses: nick-invision/retry@v2
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          command: php artisan dusk --env=dusk
+
+      - name: Upload Dusk Screenshots
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: screenshots
+          path: tests/Browser/screenshots
+
+      - name: Upload Console Logs
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: console
+          path: tests/Browser/console
+
+      - name: Upload Laravel Logs
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: logs
+          path: storage/logs

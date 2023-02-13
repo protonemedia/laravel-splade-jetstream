@@ -28,6 +28,8 @@ use Livewire\Livewire;
 
 class JetstreamServiceProvider extends ServiceProvider
 {
+    use BootsJetstreamSpladeStack;
+
     /**
      * Register any application services.
      *
@@ -71,7 +73,10 @@ class JetstreamServiceProvider extends ServiceProvider
 
         Fortify::viewPrefix('auth.');
 
-        $this->configureComponents();
+        if (config('jetstream.stack') !== 'splade') {
+            $this->configureComponents();
+        }
+
         $this->configurePublishing();
         $this->configureRoutes();
         $this->configureCommands();
@@ -92,6 +97,10 @@ class JetstreamServiceProvider extends ServiceProvider
 
         if (config('jetstream.stack') === 'inertia') {
             $this->bootInertia();
+        }
+
+        if (config('jetstream.stack') === 'splade') {
+            $this->bootSplade();
         }
     }
 
