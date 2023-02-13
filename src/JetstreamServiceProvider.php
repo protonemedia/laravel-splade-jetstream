@@ -73,7 +73,10 @@ class JetstreamServiceProvider extends ServiceProvider
 
         Fortify::viewPrefix('auth.');
 
-        $this->configureComponents();
+        if (config('jetstream.stack') !== 'splade') {
+            $this->configureComponents();
+        }
+
         $this->configurePublishing();
         $this->configureRoutes();
         $this->configureCommands();
