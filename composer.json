@@ -11,6 +11,10 @@
         {
             "name": "Taylor Otwell",
             "email": "taylor@laravel.com"
+        },
+        {
+            "name": "Pascal Baljet",
+            "email": "pascal@protone.media"
         }
     ],
     "require": {
