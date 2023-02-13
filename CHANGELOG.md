@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/jetstream/compare/v2.16.1...2.x)
+## [Unreleased](https://github.com/laravel/jetstream/compare/2.0.0...2.x-splade)
+
+## [2.0.0](https://github.com/laravel/jetstream/compare/v2.16.1...2.0.0) - 2023-02-13
+
+Splade Installer (#3)
 
 ## [v2.16.1](https://github.com/laravel/jetstream/compare/v2.16.0...v2.16.1) - 2023-02-03
 
