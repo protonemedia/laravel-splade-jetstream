@@ -46,11 +46,11 @@ jobs:
       fail-fast: true
       matrix:
         php: [8.2, 8.1, 8.0]
-        laravel: [10.*, 9.*]
+        laravel: [10.0, 9.3]
         dependency-version: [prefer-lowest, prefer-stable]
         exclude:
           - php: 8.0
-            laravel: 10.*
+            laravel: 10.0
 
     name: Dusk Tests - P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }}
 
@@ -64,7 +64,7 @@ jobs:
 
       - name: Setup Laravel
         run: |
-          composer create-project laravel/laravel:^9.3 .
+          composer create-project laravel/laravel:^${{ matrix.laravel }} .
           composer require protonemedia/laravel-splade
           composer require laravel/jetstream
 
