@@ -1,8 +1,8 @@
 @seoTitle(__('Reset Password'))
 
-<x-jet-authentication-card>
+<x-authentication-card>
     <x-slot:logo>
-        <x-jet-authentication-card-logo />
+        <x-authentication-card-logo />
     </x-slot>
 
     <x-splade-form class="space-y-4" :action="route('password.update')" :default="['email' => request()->input('email'), 'token' => request()->route('token')]">
@@ -14,4 +14,4 @@
             <x-splade-submit :label="__('Reset Password')" />
         </div>
     </x-splade-form>
-</x-jet-authentication-card>
+</x-authentication-card>

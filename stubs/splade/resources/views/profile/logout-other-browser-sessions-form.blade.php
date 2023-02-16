@@ -7,7 +7,7 @@
     require-password
     stay
 >
-    <x-jet-action-section>
+    <x-action-section>
         <x-slot:title>
             {{ __('Browser Sessions') }}
         </x-slot>
@@ -17,7 +17,7 @@
         </x-slot>
 
         <x-slot:content>
-            <div class="max-w-xl text-sm text-gray-600">
+            <div class="max-w-xl text-sm text-gray-600 dark:text-gray-400">
                 {{ __('If necessary, you may log out of all of your other browser sessions across all of your devices. Some of your recent sessions are listed below; however, this list may not be exhaustive. If you feel your account has been compromised, you should also update your password.') }}
             </div>
 
@@ -39,7 +39,7 @@
                             </div>
 
                             <div class="ml-3">
-                                <div class="text-sm text-gray-600">
+                                <div class="text-sm text-gray-600 dark:text-gray-400">
                                     {{ $session->agent['platform'] ?: 'Unknown' }} - {{ $session->agent['browser'] ?: 'Unknown' }}
                                 </div>
 
@@ -63,10 +63,10 @@
             <div class="flex items-center mt-5">
                 <x-splade-submit :label="__('Log Out Other Browser Sessions')" />
 
-                <x-jet-action-message v-if="form.recentlySuccessful" class="ml-3">
+                <x-action-message v-if="form.recentlySuccessful" class="ml-3">
                     {{ __('Done.') }}
-                </x-jet-action-message>
+                </x-action-message>
             </div>
         </x-slot>
-    </x-jet-action-section>
+    </x-action-section>
 </x-splade-form>

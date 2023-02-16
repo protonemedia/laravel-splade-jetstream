@@ -1,5 +1,5 @@
 <x-splade-form method="put" :action="route('teams.update', $team)" :default="$team" stay @success="$splade.emit('refresh-navigation-menu')">
-    <x-jet-form-section dusk="update-team-name-form">
+    <x-form-section dusk="update-team-name-form">
         <x-slot:title>
             {{ __('Team Name') }}
         </x-slot>
@@ -16,8 +16,8 @@
                         <img class="w-12 h-12 rounded-full object-cover" src="{{ $team->owner->profile_photo_url }}" :alt="@js($team->owner->name)">
 
                         <div class="ml-4 leading-tight">
-                            <div v-text="@js($team->owner->name)" />
-                            <div class="text-gray-700 text-sm">
+                            <div class="text-gray-900 dark:text-white" v-text="@js($team->owner->name)" />
+                            <div class="text-gray-700 dark:text-gray-300 text-sm">
                                 {{ $team->owner->email }}
                             </div>
                         </div>
@@ -33,12 +33,12 @@
 
         @if($permissions['canUpdateTeam'])
             <x-slot:actions>
-                <x-jet-action-message v-if="form.recentlySuccessful" class="mr-3">
+                <x-action-message v-if="form.recentlySuccessful" class="mr-3">
                     {{ __('Saved.') }}
-                </x-jet-action-message>
+                </x-action-message>
 
                 <x-splade-submit :label="__('Save')" />
             </x-slot>
         @endif
-    </x-jet-form-section>
+    </x-form-section>
 </x-splade-form>

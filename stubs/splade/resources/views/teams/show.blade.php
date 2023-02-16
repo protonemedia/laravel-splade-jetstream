@@ -2,7 +2,7 @@
 
 <x-app-layout>
     <x-slot:header>
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('Team Settings') }}
         </h2>
     </x-slot>
@@ -11,7 +11,7 @@
         @include('teams.update-team-name-form')
 
         @if($permissions['canAddTeamMembers'])
-            <x-jet-section-border />
+            <x-section-border />
 
             <div class="mt-10 sm:mt-0" dusk="add-team-member">
                 @include('teams.add-team-member')
@@ -19,7 +19,7 @@
         @endif
 
         @if($permissions['canAddTeamMembers'] && $team->teamInvitations->isNotEmpty())
-            <x-jet-section-border />
+            <x-section-border />
 
             <div class="mt-10 sm:mt-0" dusk="team-member-invitations">
                 @include('teams.team-member-invitations')
@@ -27,7 +27,7 @@
         @endif
 
         @if($team->users->isNotEmpty())
-            <x-jet-section-border />
+            <x-section-border />
 
             <div class="mt-10 sm:mt-0" dusk="manage-team-members">
                 @include('teams.manage-team-members')
@@ -35,7 +35,7 @@
         @endif
 
         @if($permissions['canDeleteTeam'] && !$team->personal_team)
-            <x-jet-section-border />
+            <x-section-border />
 
             <div class="mt-10 sm:mt-0" dusk="delete-team-form">
                 @include('teams.delete-team-form')

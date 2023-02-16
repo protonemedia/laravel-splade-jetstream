@@ -1,4 +1,4 @@
-<x-jet-action-section>
+<x-action-section>
     <x-slot:title>
         {{ __('Pending Team Invitations') }}
     </x-slot>
@@ -12,7 +12,7 @@
         <div class="space-y-6">
             @foreach($team->teamInvitations as $invitation)
                 <div class="flex items-center justify-between">
-                    <div class="text-gray-600">
+                    <div class="text-gray-600 dark:text-gray-400">
                         {{ $invitation->email }}
                     </div>
 
@@ -33,4 +33,4 @@
             @endforeach
         </div>
     </x-slot>
-</x-jet-action-section>
+</x-action-section>

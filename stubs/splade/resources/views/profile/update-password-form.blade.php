@@ -1,5 +1,5 @@
 <x-splade-form method="put" :action="route('user-password.update')" stay>
-    <x-jet-form-section>
+    <x-form-section>
         <x-slot:title>
             {{ __('Update Password') }}
         </x-slot>
@@ -23,11 +23,11 @@
         </x-slot>
 
         <x-slot:actions>
-            <x-jet-action-message v-if="form.recentlySuccessful" class="mr-3">
+            <x-action-message v-if="form.recentlySuccessful" class="mr-3">
                 {{ __('Saved.') }}
-            </x-jet-action-message>
+            </x-action-message>
 
             <x-splade-submit :label="__('Save')" />
         </x-slot>
-    </x-jet-form-section>
+    </x-form-section>
 </x-splade-form>

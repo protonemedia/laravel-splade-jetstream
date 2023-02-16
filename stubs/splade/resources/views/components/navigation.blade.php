@@ -1,7 +1,7 @@
 <x-splade-data store="mobileNavigation" default="{ open: false }" />
 
 <x-splade-rehydrate on="refresh-navigation-menu, profile-information-updated">
-    <nav class="bg-white border-b border-gray-100">
+    <nav class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
         <!-- Primary Navigation Menu -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
@@ -9,15 +9,15 @@
                     <!-- Logo -->
                     <div class="shrink-0 flex items-center">
                         <Link href="{{ route('dashboard') }}">
-                            <x-jet-application-mark class="block h-9 w-auto" />
+                            <x-application-mark class="block h-9 w-auto" />
                         </Link>
                     </div>
 
                     <!-- Navigation Links -->
                     <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                        <x-jet-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                             {{ __('Dashboard') }}
-                        </x-jet-nav-link>
+                        </x-nav-link>
                     </div>
                 </div>
 
@@ -27,7 +27,7 @@
                             <x-splade-dropdown>
                                 <x-slot:trigger>
                                     <span class="inline-flex rounded-md">
-                                        <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:bg-gray-50 hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition">
+                                        <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 transition ease-in-out duration-150">
                                             {{ auth()->user()->currentTeam->name }}
 
                                             <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -44,17 +44,17 @@
                                     </div>
 
                                     <!-- Team Settings -->
-                                    <x-jet-dropdown-link :href="route('teams.show', auth()->user()->currentTeam)">
+                                    <x-dropdown-link :href="route('teams.show', auth()->user()->currentTeam)">
                                         {{ __('Team Settings') }}
-                                    </x-jet-dropdown-link>
+                                    </x-dropdown-link>
 
                                     @can('create', Laravel\Jetstream\Jetstream::newTeamModel())
-                                        <x-jet-dropdown-link :href="route('teams.create')">
+                                        <x-dropdown-link :href="route('teams.create')">
                                             {{ __('Create New Team') }}
-                                        </x-jet-dropdown-link>
+                                        </x-dropdown-link>
                                     @endcan
 
-                                    <div class="border-t border-gray-100" />
+                                    <div class="border-t border-gray-200 dark:border-gray-600" />
 
                                     <!-- Team Switcher -->
                                     <div class="block px-4 py-2 text-xs text-gray-400">
@@ -63,7 +63,7 @@
 
                                     @foreach(auth()->user()->allTeams() as $team)
                                         <x-splade-form method="PUT" :action="route('current-team.update')" :default="['team_id' => $team->getKey()]">
-                                            <x-jet-dropdown-link as="button">
+                                            <x-dropdown-link as="button">
                                                 <div class="flex items-center">
                                                     @if($team->is(auth()->user()->currentTeam))
                                                         <svg class="mr-2 h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -73,7 +73,7 @@
 
                                                     <div>{{ $team->name }}</div>
                                                 </div>
-                                            </x-jet-dropdown-link>
+                                            </x-dropdown-link>
                                         </x-splade-form>
                                     @endforeach
                                 </div>
@@ -91,7 +91,7 @@
                                     </button>
                                 @else
                                     <span class="inline-flex rounded-md">
-                                        <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition">
+                                        <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 transition ease-in-out duration-150">
                                             {{ auth()->user()->name }}
 
                                             <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -108,23 +108,23 @@
                                     {{ __('Manage Account') }}
                                 </div>
 
-                                <x-jet-dropdown-link :href="route('profile.show')">
+                                <x-dropdown-link :href="route('profile.show')">
                                     {{ __('Profile') }}
-                                </x-jet-dropdown-link>
+                                </x-dropdown-link>
 
                                 @if(\Laravel\Jetstream\Jetstream::hasApiFeatures())
-                                    <x-jet-dropdown-link :href="route('api-tokens.index')">
+                                    <x-dropdown-link :href="route('api-tokens.index')">
                                         {{ __('API Tokens') }}
-                                    </x-jet-dropdown-link>
+                                    </x-dropdown-link>
                                 @endif
 
-                                <div class="border-t border-gray-100" />
+                                <div class="border-t border-gray-200 dark:border-gray-600" />
 
                                 <!-- Authentication -->
                                 <x-splade-form :action="route('logout')">
-                                    <x-jet-dropdown-link as="button">
+                                    <x-dropdown-link as="button">
                                         {{ __('Log Out') }}
-                                    </x-jet-dropdown-link>
+                                    </x-dropdown-link>
                                 </x-splade-form>
                             </div>
                         </x-splade-dropdown>
@@ -133,7 +133,7 @@
 
                 <!-- Hamburger -->
                 <div class="-mr-2 flex items-center sm:hidden">
-                    <button class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition" @click="mobileNavigation.open = ! mobileNavigation.open">
+                    <button class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out" @click="mobileNavigation.open = ! mobileNavigation.open">
                         <svg
                             class="h-6 w-6"
                             stroke="currentColor"
@@ -163,13 +163,13 @@
         <!-- Responsive Navigation Menu -->
         <div :class="{'block': mobileNavigation.open, 'hidden': ! mobileNavigation.open}" class="sm:hidden">
             <div class="pt-2 pb-3 space-y-1">
-                <x-jet-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                     {{ __('Dashboard') }}
-                </x-jet-responsive-nav-link>
+                </x-responsive-nav-link>
             </div>
 
             <!-- Responsive Settings Options -->
-            <div class="pt-4 pb-1 border-t border-gray-200">
+            <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
                 <div class="flex items-center px-4">
                     @if(\Laravel\Jetstream\Jetstream::managesProfilePhotos())
                         <div class="shrink-0 mr-3">
@@ -178,7 +178,7 @@
                     @endif
 
                     <div>
-                        <div class="font-medium text-base text-gray-800">
+                        <div class="font-medium text-base text-gray-800 dark:text-gray-200">
                             {{ auth()->user()->name }}
                         </div>
                         <div class="font-medium text-sm text-gray-500">
@@ -188,43 +188,43 @@
                 </div>
 
                 <div class="mt-3 space-y-1">
-                    <x-jet-responsive-nav-link :href="route('profile.show')" :active="request()->routeIs('profile.show')">
+                    <x-responsive-nav-link :href="route('profile.show')" :active="request()->routeIs('profile.show')">
                         {{ __('Profile') }}
-                    </x-jet-responsive-nav-link>
+                    </x-responsive-nav-link>
 
                     @if(\Laravel\Jetstream\Jetstream::hasApiFeatures())
-                        <x-jet-responsive-nav-link :href="route('api-tokens.index')" :active="request()->routeIs('api-tokens.index')">
+                        <x-responsive-nav-link :href="route('api-tokens.index')" :active="request()->routeIs('api-tokens.index')">
                             {{ __('API Tokens') }}
-                        </x-jet-responsive-nav-link>
+                        </x-responsive-nav-link>
                     @endif
 
                     <!-- Authentication -->
                     <x-splade-form method="POST" :action="route('logout')">
-                        <x-jet-responsive-nav-link as="button">
+                        <x-responsive-nav-link as="button">
                             {{ __('Log Out') }}
-                        </x-jet-responsive-nav-link>
+                        </x-responsive-nav-link>
                     </x-splade-form>
 
                     <!-- Team Management -->
                     @if(\Laravel\Jetstream\Jetstream::hasTeamFeatures())
-                        <div class="border-t border-gray-200" />
+                        <div class="border-t border-gray-200 dark:border-gray-600" />
 
                         <div class="block px-4 py-2 text-xs text-gray-400">
                             {{ __('Manage Team') }}
                         </div>
 
                         <!-- Team Settings -->
-                        <x-jet-responsive-nav-link :href="route('teams.show', auth()->user()->currentTeam)" :active="request()->routeIs('teams.show')">
+                        <x-responsive-nav-link :href="route('teams.show', auth()->user()->currentTeam)" :active="request()->routeIs('teams.show')">
                             {{ __('Team Settings') }}
-                        </x-jet-responsive-nav-link>
+                        </x-responsive-nav-link>
 
                         @can('create', Laravel\Jetstream\Jetstream::newTeamModel())
-                            <x-jet-responsive-nav-link :href="route('teams.create')" :active="request()->routeIs('teams.create')">
+                            <x-responsive-nav-link :href="route('teams.create')" :active="request()->routeIs('teams.create')">
                                 {{ __('Create New Team') }}
-                            </x-jet-responsive-nav-link>
+                            </x-responsive-nav-link>
                         @endcan
 
-                        <div class="border-t border-gray-200" />
+                        <div class="border-t border-gray-200 dark:border-gray-600" />
 
                         <!-- Team Switcher -->
                         <div class="block px-4 py-2 text-xs text-gray-400">
@@ -233,7 +233,7 @@
 
                         @foreach(auth()->user()->allTeams() as $team)
                             <x-splade-form method="PUT" :action="route('current-team.update')" :default="['team_id' => $team->getKey()]">
-                                <x-jet-responsive-nav-link as="button">
+                                <x-responsive-nav-link as="button">
                                     <div class="flex items-center">
                                         @if($team->is(auth()->user()->currentTeam))
                                             <svg class="mr-2 h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -243,7 +243,7 @@
 
                                         <div>{{ $team->name }}</div>
                                     </div>
-                                </x-jet-responsive-nav-link>
+                                </x-responsive-nav-link>
                             </x-splade-form>
                         @endforeach
                     @endif

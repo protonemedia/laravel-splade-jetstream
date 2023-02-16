@@ -6,6 +6,7 @@ use Illuminate\Filesystem\Filesystem;
 use ProtoneMedia\Splade\Commands\InstallsSpladeExceptionHandler;
 use ProtoneMedia\Splade\Commands\InstallsSpladeRouteMiddleware;
 use Symfony\Component\Process\Process;
+use Symfony\Component\Finder\Finder;
 
 trait InstallsSpladeStack
 {
@@ -91,6 +92,12 @@ trait InstallsSpladeStack
         (new Filesystem)->ensureDirectoryExists(resource_path('views'));
         copy($spladeBaseStubsDir.'resources/views/root.blade.php', resource_path('views/root.blade.php'));
         (new Filesystem)->copyDirectory($spladeJetstreamStubsDir.'resources/views', resource_path('views'));
+
+        // Remove Dark Classes until Splade supports it...
+        $this->removeDarkClasses((new Finder)
+            ->in(resource_path('views'))
+            ->name('*.blade.php')
+        );
 
         // Routes...
         $this->replaceInFile('auth:api', 'auth:sanctum', base_path('routes/api.php'));

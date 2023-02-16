@@ -1,4 +1,4 @@
-<x-jet-action-section>
+<x-action-section>
     <x-slot:title>
         {{ __('Team Members') }}
     </x-slot>
@@ -14,7 +14,7 @@
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
                         <img class="w-8 h-8 rounded-full" src="{{ $user->profile_photo_url }}" :alt="@js($user->name)">
-                        <div class="ml-4" v-text="@js($user->name)" />
+                        <div class="ml-4 dark:text-white" v-text="@js($user->name)" />
                     </div>
 
                     <div class="flex items-center">
@@ -59,4 +59,4 @@
             @endforeach
         </div>
     </x-slot>
-</x-jet-action-section>
+</x-action-section>

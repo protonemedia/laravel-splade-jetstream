@@ -1,4 +1,4 @@
-<x-jet-action-section>
+<x-action-section>
     <x-slot:title>
         {{ __('Delete Account') }}
     </x-slot>
@@ -8,7 +8,7 @@
     </x-slot>
 
     <x-slot:content>
-        <div class="max-w-xl text-sm text-gray-600">
+        <div class="max-w-xl text-sm text-gray-600 dark:text-gray-400">
             {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.') }}
         </div>
 
@@ -24,4 +24,4 @@
             <x-splade-submit danger :label="__('Delete Account')" />
         </x-splade-form>
     </x-slot>
-</x-jet-action-section>
+</x-action-section>

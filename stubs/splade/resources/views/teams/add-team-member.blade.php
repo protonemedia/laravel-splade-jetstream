@@ -1,5 +1,5 @@
 <x-splade-form :action="route('team-members.store', $team)">
-    <x-jet-form-section>
+    <x-form-section>
         <x-slot:title>
             {{ __('Add Team Member') }}
         </x-slot>
@@ -10,7 +10,7 @@
 
         <x-slot:form>
             <div class="col-span-6">
-                <div class="max-w-xl text-sm text-gray-600">
+                <div class="max-w-xl text-sm text-gray-600 dark:text-gray-400">
                     {{ __('Please provide the email address of the person you would like to add to this team.') }}
                 </div>
             </div>
@@ -58,11 +58,11 @@
         </x-slot>
 
         <x-slot:actions>
-            <x-jet-action-message v-if="form.recentlySuccessful" class="mr-3">
+            <x-action-message v-if="form.recentlySuccessful" class="mr-3">
                 {{ __('Added.') }}
-            </x-jet-action-message>
+            </x-action-message>
 
             <x-splade-submit :label="__('Add')" />
         </x-slot>
-    </x-jet-form-section>
+    </x-form-section>
 </x-splade-form>
