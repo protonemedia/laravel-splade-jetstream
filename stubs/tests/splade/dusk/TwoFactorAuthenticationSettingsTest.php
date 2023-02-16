@@ -40,6 +40,9 @@ class TwoFactorAuthenticationSettingsTest extends DuskTestCase
         });
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function test_two_factor_authentication_can_be_confirmed(): void
     {
         if (! Features::optionEnabled(Features::twoFactorAuthentication(), 'confirm')) {

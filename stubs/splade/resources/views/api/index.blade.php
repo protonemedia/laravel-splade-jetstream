@@ -2,7 +2,7 @@
 
 <x-app-layout>
     <x-slot:header>
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('API Tokens') }}
         </h2>
     </x-slot>
@@ -12,7 +12,7 @@
             <div>
                 <!-- Generate API Token -->
                 <x-splade-form :action="route('api-tokens.store')">
-                    <x-jet-form-section>
+                    <x-form-section>
                         <x-slot:title>
                             {{ __('Create API Token') }}
                         </x-slot>
@@ -41,21 +41,21 @@
                         </x-slot>
 
                         <x-slot:actions>
-                            <x-jet-action-message v-if="form.recentlySuccessful" class="mr-3">
+                            <x-action-message v-if="form.recentlySuccessful" class="mr-3">
                                 {{ __('Created.') }}
-                            </x-jet-action-message>
+                            </x-action-message>
 
                             <x-splade-submit :label="__('Create')" />
                         </x-slot>
-                    </x-jet-form-section>
+                    </x-form-section>
                 </x-splade-form>
 
                 @if(count($tokens) > 0)
-                    <x-jet-section-border />
+                    <x-section-border />
 
                     <!-- Manage API Tokens -->
                     <div class="mt-10 sm:mt-0">
-                        <x-jet-action-section>
+                        <x-action-section>
                             <x-slot:title>
                                 {{ __('Manage API Tokens') }}
                             </x-slot>
@@ -69,7 +69,7 @@
                                 <div class="space-y-6">
                                     @foreach($tokens as $token)
                                         <div class="flex items-center justify-between">
-                                            <div class="break-all">
+                                            <div class="break-all dark:text-white">
                                                 {{ $token['name'] }}
                                             </div>
 
@@ -108,13 +108,13 @@
                                     @endforeach
                                 </div>
                             </x-slot>
-                        </x-jet-action-section>
+                        </x-action-section>
                     </div>
                 @endif
 
                 @if($newToken = session('flash.token'))
                     <x-splade-modal :close-button="false" name="token-modal" class="!p-0">
-                        <x-jet-dialog-modal>
+                        <x-dialog-modal>
                             <x-slot:title>
                                 {{ __('API Token') }}
                             </x-slot>
@@ -134,7 +134,7 @@
                                     {{ __('Cancel') }}
                                 </button>
                             </x-slot:footer>
-                        </x-jet-dialog-modal>
+                        </x-dialog-modal>
                     </x-splade-modal>
 
                     <x-splade-script>$splade.openPreloadedModal('token-modal')</x-splade-script>

@@ -64,7 +64,7 @@ class UpdatePasswordTest extends DuskTestCase
                         ->type('password', 'new-password')
                         ->type('password_confirmation', 'wrong-password')
                         ->press('Save')
-                        ->waitForText('The password confirmation does not match.');
+                        ->waitForText('The password field confirmation does not match.');
                 });
 
             $this->assertTrue(Hash::check('password', $user->fresh()->password));

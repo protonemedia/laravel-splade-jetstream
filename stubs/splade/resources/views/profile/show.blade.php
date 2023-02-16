@@ -2,7 +2,7 @@
 
 <x-app-layout>
     <x-slot:header>
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('Profile') }}
         </h2>
     </x-slot>
@@ -11,7 +11,7 @@
         @if(Laravel\Fortify\Features::canUpdateProfileInformation())
             @include('profile.update-profile-information-form')
 
-            <x-jet-section-border />
+            <x-section-border />
         @endif
 
         @if(Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::updatePasswords()))
@@ -19,7 +19,7 @@
                 @include('profile.update-password-form')
             </div>
 
-            <x-jet-section-border />
+            <x-section-border />
         @endif
 
         @if(Laravel\Fortify\Features::canManageTwoFactorAuthentication())
@@ -27,7 +27,7 @@
                 @include('profile.two-factor-authentication-form')
             </div>
 
-            <x-jet-section-border />
+            <x-section-border />
         @endif
 
         <div class="mt-10 sm:mt-0" dusk="logout-other-browser-sessions-form">
@@ -35,7 +35,7 @@
         </div>
 
         @if(Laravel\Jetstream\Jetstream::hasAccountDeletionFeatures())
-            <x-jet-section-border />
+            <x-section-border />
 
             <div class="mt-10 sm:mt-0" dusk="delete-user-form">
                 @include('profile.delete-user-form')

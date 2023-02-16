@@ -39,23 +39,25 @@ class ShareInertiaData
                     'managesProfilePhotos' => Jetstream::managesProfilePhotos(),
                 ];
             },
-            'user' => function () use ($request) {
-                if (! $user = $request->user()) {
-                    return;
-                }
+            'auth' => [
+                'user' => function () use ($request) {
+                    if (! $user = $request->user()) {
+                        return;
+                    }
 
-                $userHasTeamFeatures = Jetstream::userHasTeamFeatures($user);
+                    $userHasTeamFeatures = Jetstream::userHasTeamFeatures($user);
 
-                if ($user && $userHasTeamFeatures) {
-                    $user->currentTeam;
-                }
+                    if ($user && $userHasTeamFeatures) {
+                        $user->currentTeam;
+                    }
 
-                return array_merge($user->toArray(), array_filter([
-                    'all_teams' => $userHasTeamFeatures ? $user->allTeams()->values() : null,
-                ]), [
-                    'two_factor_enabled' => ! is_null($user->two_factor_secret),
-                ]);
-            },
+                    return array_merge($user->toArray(), array_filter([
+                        'all_teams' => $userHasTeamFeatures ? $user->allTeams()->values() : null,
+                    ]), [
+                        'two_factor_enabled' => ! is_null($user->two_factor_secret),
+                    ]);
+                },
+            ],
             'errorBags' => function () {
                 return collect(optional(Session::get('errors'))->getBags() ?: [])->mapWithKeys(function ($bag, $key) {
                     return [$key => $bag->messages()];

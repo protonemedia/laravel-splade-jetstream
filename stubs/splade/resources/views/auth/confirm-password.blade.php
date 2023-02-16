@@ -1,11 +1,11 @@
 @seoTitle(__('Secure Area'))
 
-<x-jet-authentication-card>
+<x-authentication-card>
     <x-slot:logo>
-        <x-jet-authentication-card-logo />
+        <x-authentication-card-logo />
     </x-slot>
 
-    <div class="mb-4 text-sm text-gray-600">
+    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
         {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
     </div>
 
@@ -16,4 +16,4 @@
             <x-splade-submit :label="__('Confirm')" />
         </div>
     </x-splade-form>
-</x-jet-authentication-card>
+</x-authentication-card>

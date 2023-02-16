@@ -7,6 +7,7 @@ use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 use RuntimeException;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 
@@ -20,6 +21,7 @@ class InstallCommand extends Command
      * @var string
      */
     protected $signature = 'jetstream:install {stack=splade : The development stack that should be installed (inertia,livewire,splade)}
+                                              {--dark : Indicate that dark mode support should be installed}
                                               {--teams : Indicates if team support should be installed}
                                               {--api : Indicates if API support should be installed}
                                               {--verification : Indicates if email verification support should be installed}
@@ -96,6 +98,10 @@ class InstallCommand extends Command
                 return 1;
             }
         }
+
+        // Emails...
+        (new Filesystem)->ensureDirectoryExists(resource_path('views/emails'));
+        (new Filesystem)->copyDirectory(__DIR__.'/../../stubs/resources/views/emails', resource_path('views/emails'));
 
         // Tests...
         $stubs = $this->getTestStubsPath();
@@ -188,6 +194,7 @@ class InstallCommand extends Command
         (new Filesystem)->ensureDirectoryExists(resource_path('markdown'));
         (new Filesystem)->ensureDirectoryExists(resource_path('views/api'));
         (new Filesystem)->ensureDirectoryExists(resource_path('views/auth'));
+        (new Filesystem)->ensureDirectoryExists(resource_path('views/components'));
         (new Filesystem)->ensureDirectoryExists(resource_path('views/layouts'));
         (new Filesystem)->ensureDirectoryExists(resource_path('views/profile'));
 
@@ -211,6 +218,9 @@ class InstallCommand extends Command
         copy(__DIR__.'/../../stubs/app/Actions/Fortify/CreateNewUser.php', app_path('Actions/Fortify/CreateNewUser.php'));
         copy(__DIR__.'/../../stubs/app/Actions/Fortify/UpdateUserProfileInformation.php', app_path('Actions/Fortify/UpdateUserProfileInformation.php'));
         copy(__DIR__.'/../../stubs/app/Actions/Jetstream/DeleteUser.php', app_path('Actions/Jetstream/DeleteUser.php'));
+
+        // Components...
+        (new Filesystem)->copyDirectory(__DIR__.'/../../stubs/livewire/resources/views/components', resource_path('views/components'));
 
         // View Components...
         copy(__DIR__.'/../../stubs/livewire/app/View/Components/AppLayout.php', app_path('View/Components/AppLayout.php'));
@@ -256,6 +266,14 @@ class InstallCommand extends Command
         // Teams...
         if ($this->option('teams')) {
             $this->installLivewireTeamStack();
+        }
+
+        if (! $this->option('dark')) {
+            $this->removeDarkClasses((new Finder)
+                ->in(resource_path('views'))
+                ->name('*.blade.php')
+                ->filter(fn ($file) => $file->getPathname() !== resource_path('views/welcome.blade.php'))
+            );
         }
 
         if (file_exists(base_path('pnpm-lock.yaml'))) {
@@ -454,6 +472,14 @@ EOF;
 
         if ($this->option('ssr')) {
             $this->installInertiaSsrStack();
+        }
+
+        if (! $this->option('dark')) {
+            $this->removeDarkClasses((new Finder)
+                ->in(resource_path('js'))
+                ->name('*.vue')
+                ->notPath('Pages/Welcome.vue')
+            );
         }
 
         if (file_exists(base_path('pnpm-lock.yaml'))) {
@@ -761,6 +787,19 @@ EOF;
     protected function replaceInFile($search, $replace, $path)
     {
         file_put_contents($path, str_replace($search, $replace, file_get_contents($path)));
+    }
+
+    /**
+     * Remove Tailwind dark classes from the given files.
+     *
+     * @param  \Symfony\Component\Finder\Finder  $finder
+     * @return void
+     */
+    protected function removeDarkClasses(Finder $finder)
+    {
+        foreach ($finder as $file) {
+            file_put_contents($file->getPathname(), preg_replace('/\sdark:[^\s"\']+/', '', $file->getContents()));
+        }
     }
 
     /**

@@ -1,12 +1,12 @@
 @seoTitle(__('Log in'))
 
-<x-jet-authentication-card>
+<x-authentication-card>
     <x-slot:logo>
-        <x-jet-authentication-card-logo />
+        <x-authentication-card-logo />
     </x-slot>
 
     @if($status = session('status'))
-        <div class="mb-4 font-medium text-sm text-green-600">
+        <div class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
             {{ $status }}
         </div>
     @endif
@@ -18,7 +18,7 @@
 
         <div class="flex items-center justify-end mt-4">
             @if(Route::has('password.request'))
-                <Link href="{{ route('password.request') }}" class="underline text-sm text-gray-600 hover:text-gray-900">
+                <Link href="{{ route('password.request') }}" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
                     {{ __('Forgot your password?') }}
                 </Link>
             @endif
@@ -26,4 +26,4 @@
             <x-splade-submit :label="__('Log in')" class="ml-4" />
         </div>
     </x-splade-form>
-</x-jet-authentication-card>
+</x-authentication-card>
