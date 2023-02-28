@@ -13,12 +13,14 @@ use Symfony\Component\Process\Process;
 
 class InstallCommand extends Command
 {
+    use InstallsSpladeStack;
+
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'jetstream:install {stack : The development stack that should be installed (inertia,livewire)}
+    protected $signature = 'jetstream:install {stack=splade : The development stack that should be installed (inertia,livewire,splade)}
                                               {--dark : Indicate that dark mode support should be installed}
                                               {--teams : Indicates if team support should be installed}
                                               {--api : Indicates if API support should be installed}
@@ -41,8 +43,8 @@ class InstallCommand extends Command
      */
     public function handle()
     {
-        if (! in_array($this->argument('stack'), ['inertia', 'livewire'])) {
-            $this->components->error('Invalid stack. Supported stacks are [inertia] and [livewire].');
+        if (! in_array($this->argument('stack'), ['inertia', 'livewire', 'splade'])) {
+            $this->components->error('Invalid stack. Supported stacks are [inertia] and [livewire] and [splade].');
 
             return 1;
         }
@@ -89,6 +91,10 @@ class InstallCommand extends Command
             }
         } elseif ($this->argument('stack') === 'inertia') {
             if (! $this->installInertiaStack()) {
+                return 1;
+            }
+        } elseif ($this->argument('stack') === 'splade') {
+            if (! $this->installSpladeStack()) {
                 return 1;
             }
         }
@@ -153,10 +159,10 @@ class InstallCommand extends Command
 
         // Sanctum...
         (new Process([$this->phpBinary(), 'artisan', 'vendor:publish', '--provider=Laravel\Sanctum\SanctumServiceProvider', '--force'], base_path()))
-                ->setTimeout(null)
-                ->run(function ($type, $output) {
-                    $this->output->write($output);
-                });
+            ->setTimeout(null)
+            ->run(function ($type, $output) {
+                $this->output->write($output);
+            });
 
         // Update Configuration...
         $this->replaceInFile('inertia', 'livewire', config_path('jetstream.php'));
@@ -361,10 +367,10 @@ EOF;
 
         // Sanctum...
         (new Process([$this->phpBinary(), 'artisan', 'vendor:publish', '--provider=Laravel\Sanctum\SanctumServiceProvider', '--force'], base_path()))
-                ->setTimeout(null)
-                ->run(function ($type, $output) {
-                    $this->output->write($output);
-                });
+            ->setTimeout(null)
+            ->run(function ($type, $output) {
+                $this->output->write($output);
+            });
 
         // Tailwind Configuration...
         copy(__DIR__.'/../../stubs/inertia/tailwind.config.js', base_path('tailwind.config.js'));
