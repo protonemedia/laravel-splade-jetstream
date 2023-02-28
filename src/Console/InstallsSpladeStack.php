@@ -16,7 +16,7 @@ trait InstallsSpladeStack
     /**
      * Install the Splade Breeze stack.
      *
-     * @return void
+     * @return bool
      */
     protected function installSpladeStack()
     {
