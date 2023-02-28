@@ -76,6 +76,7 @@ class JetstreamServiceProvider extends ServiceProvider
         $this->configureCommands();
 
         RedirectResponse::macro('banner', function ($message) {
+            /** @var \Illuminate\Http\RedirectResponse $this */
             return $this->with('flash', [
                 'bannerStyle' => 'success',
                 'banner' => $message,
@@ -83,6 +84,7 @@ class JetstreamServiceProvider extends ServiceProvider
         });
 
         RedirectResponse::macro('dangerBanner', function ($message) {
+            /** @var \Illuminate\Http\RedirectResponse $this */
             return $this->with('flash', [
                 'bannerStyle' => 'danger',
                 'banner' => $message,
