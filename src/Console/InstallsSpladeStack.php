@@ -5,8 +5,9 @@ namespace Laravel\Jetstream\Console;
 use Illuminate\Filesystem\Filesystem;
 use ProtoneMedia\Splade\Commands\InstallsSpladeExceptionHandler;
 use ProtoneMedia\Splade\Commands\InstallsSpladeRouteMiddleware;
-use Symfony\Component\Process\Process;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Process\Process;
 
 trait InstallsSpladeStack
 {
@@ -20,6 +21,13 @@ trait InstallsSpladeStack
      */
     protected function installSpladeStack()
     {
+        // Check Laravel version...
+        if (version_compare(app()->version(), '10.0', '<')) {
+            $this->error('While you can still use Splade with Laravel 9, new projects should use Laravel 10.');
+
+            return Command::FAILURE;
+        }
+
         $this->replaceInFile('// Features::termsAndPrivacyPolicy(),', 'Features::termsAndPrivacyPolicy(),', config_path('jetstream.php'));
         $this->replaceInFile('// Features::profilePhotos(),', 'Features::profilePhotos(),', config_path('jetstream.php'));
         $this->replaceInFile("'stack' => 'inertia'", "'stack' => 'splade'", config_path('jetstream.php'));

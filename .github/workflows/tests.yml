@@ -10,7 +10,7 @@ jobs:
       fail-fast: true
       matrix:
         php: [8.2, 8.1]
-        laravel: [10.0]
+        laravel: [10.2]
 
     name: Unit/Feature Tests - P${{ matrix.php }} - L${{ matrix.laravel }}
 
