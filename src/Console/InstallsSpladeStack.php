@@ -43,7 +43,7 @@ trait InstallsSpladeStack
                 '@protonemedia/laravel-splade' => '^1.4.8',
                 '@tailwindcss/forms' => '^0.5.3',
                 '@tailwindcss/typography' => '^0.5.2',
-                '@vitejs/plugin-vue' => '^5.0.0',
+                '@vitejs/plugin-vue' => '^4.0.0',
                 'autoprefixer' => '^10.4.12',
                 'laravel-vite-plugin' => '^0.7.5',
                 'postcss' => '^8.4.18',
