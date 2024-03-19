@@ -31,10 +31,10 @@
         "protonemedia/laravel-splade": "^1.4.18"
     },
     "require-dev": {
-        "inertiajs/inertia-laravel": "^0.6.5",
+        "inertiajs/inertia-laravel": "^0.6.5|^1.0",
         "laravel/pint": "^1.4",
-        "laravel/sanctum": "^3.0",
-        "livewire/livewire": "^2.12",
+        "laravel/sanctum": "^3.0|^4.0",
+        "livewire/livewire": "^2.12|^3.0",
         "mockery/mockery": "^1.0",
         "orchestra/testbench": "^8.0|^9.0",
         "phpstan/phpstan": "^1.10",
