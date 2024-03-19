@@ -50,7 +50,7 @@ class EmailVerificationTest extends DuskTestCase
         $this->browse(function (Browser $browser) use ($user, $verificationUrl) {
             $browser->loginAs($user)
                 ->visit($verificationUrl)
-                ->assertPathIs(RouteServiceProvider::HOME)
+                ->assertPathIs('dashboard')
                 ->assertQueryStringHas('verified', 1);
         });
 

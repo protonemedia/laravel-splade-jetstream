@@ -72,7 +72,7 @@ class RegistrationTest extends DuskTestCase
             if (new User instanceof MustVerifyEmail) {
                 $browser->waitForLocation('/email/verify');
             } else {
-                $browser->waitForLocation(RouteServiceProvider::HOME)
+                $browser->waitForLocation('dashboard')
                 ->assertAuthenticated();
             }
         });
