@@ -3,6 +3,7 @@
 namespace Laravel\Jetstream\Console;
 
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\ServiceProvider;
 use ProtoneMedia\Splade\Commands\InstallsSpladeExceptionHandler;
 use ProtoneMedia\Splade\Commands\InstallsSpladeRouteMiddleware;
 use Symfony\Component\Console\Command\Command;
@@ -21,12 +22,7 @@ trait InstallsSpladeStack
      */
     protected function installSpladeStack()
     {
-        // Check Laravel version...
-        if (version_compare(app()->version(), '10.0', '<')) {
-            $this->error('While you can still use Splade with Laravel 9, new projects should use Laravel 10.');
-
-            return Command::FAILURE;
-        }
+        $legacyLaravelSkeleton = version_compare(app()->version(), '11.0', '<');
 
         $this->replaceInFile('// Features::termsAndPrivacyPolicy(),', 'Features::termsAndPrivacyPolicy(),', config_path('jetstream.php'));
         $this->replaceInFile('// Features::profilePhotos(),', 'Features::profilePhotos(),', config_path('jetstream.php'));
@@ -80,7 +76,9 @@ trait InstallsSpladeStack
         // Service Providers...
         copy(__DIR__.'/../../stubs/app/Providers/JetstreamServiceProvider.php', app_path('Providers/JetstreamServiceProvider.php'));
 
-        $this->installServiceProviderAfter('FortifyServiceProvider', 'JetstreamServiceProvider');
+        $legacyLaravelSkeleton
+            ? $this->installServiceProviderAfter('FortifyServiceProvider', 'JetstreamServiceProvider')
+            : ServiceProvider::addProviderToBootstrapFile('App\Providers\JetstreamServiceProvider');
 
         // Models...
         copy(__DIR__.'/../../stubs/app/Models/User.php', app_path('Models/User.php'));
@@ -107,8 +105,9 @@ trait InstallsSpladeStack
             ->name('*.blade.php')
         );
 
-        // Routes...
-        $this->replaceInFile('auth:api', 'auth:sanctum', base_path('routes/api.php'));
+        $legacyLaravelSkeleton
+            ? $this->replaceInFile('auth:api', 'auth:sanctum', base_path('routes/api.php'))
+            : $this->call('install:api');
 
         copy($spladeJetstreamStubsDir.'routes/web.php', base_path('routes/web.php'));
 
