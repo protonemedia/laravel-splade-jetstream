@@ -22,7 +22,7 @@ class CreateTeamTest extends DuskTestCase
                 ->waitForText('Team Details')
                 ->type('name', 'Test Team')
                 ->press('Create')
-                ->waitForLocation(RouteServiceProvider::HOME);
+                ->waitForLocation('dashboard');
 
             $this->assertCount(2, $user->fresh()->ownedTeams);
             $this->assertEquals('Test Team', $user->fresh()->ownedTeams()->latest('id')->first()->name);

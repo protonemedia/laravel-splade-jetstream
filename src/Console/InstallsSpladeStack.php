@@ -3,6 +3,7 @@
 namespace Laravel\Jetstream\Console;
 
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\ServiceProvider;
 use ProtoneMedia\Splade\Commands\InstallsSpladeExceptionHandler;
 use ProtoneMedia\Splade\Commands\InstallsSpladeRouteMiddleware;
 use Symfony\Component\Console\Command\Command;
@@ -21,12 +22,7 @@ trait InstallsSpladeStack
      */
     protected function installSpladeStack()
     {
-        // Check Laravel version...
-        if (version_compare(app()->version(), '10.0', '<')) {
-            $this->error('While you can still use Splade with Laravel 9, new projects should use Laravel 10.');
-
-            return Command::FAILURE;
-        }
+        $legacyLaravelSkeleton = version_compare(app()->version(), '11.0', '<');
 
         $this->replaceInFile('// Features::termsAndPrivacyPolicy(),', 'Features::termsAndPrivacyPolicy(),', config_path('jetstream.php'));
         $this->replaceInFile('// Features::profilePhotos(),', 'Features::profilePhotos(),', config_path('jetstream.php'));
@@ -40,16 +36,16 @@ trait InstallsSpladeStack
         // NPM Packages...
         $this->updateNodePackages(function ($packages) {
             return [
-                '@protonemedia/laravel-splade' => '^1.4.8',
-                '@tailwindcss/forms' => '^0.5.3',
-                '@tailwindcss/typography' => '^0.5.2',
-                '@vitejs/plugin-vue' => '^4.0.0',
-                'autoprefixer' => '^10.4.12',
-                'laravel-vite-plugin' => '^0.7.5',
-                'postcss' => '^8.4.18',
-                'tailwindcss' => '^3.3.0',
-                'vite' => '^4.0.0',
-                'vue' => '^3.2.41',
+                '@protonemedia/laravel-splade' => '^1.4.16',
+                '@tailwindcss/forms' => '^0.5.7',
+                '@tailwindcss/typography' => '^0.5.10',
+                '@vitejs/plugin-vue' => '^5.0',
+                'autoprefixer' => '^10.4.16',
+                'laravel-vite-plugin' => '^1.0',
+                'postcss' => '^8.4.32',
+                'tailwindcss' => '^3.4',
+                'vite' => '^5.0',
+                'vue' => '^3.4',
             ] + $packages;
         });
 
@@ -80,7 +76,9 @@ trait InstallsSpladeStack
         // Service Providers...
         copy(__DIR__.'/../../stubs/app/Providers/JetstreamServiceProvider.php', app_path('Providers/JetstreamServiceProvider.php'));
 
-        $this->installServiceProviderAfter('FortifyServiceProvider', 'JetstreamServiceProvider');
+        $legacyLaravelSkeleton
+            ? $this->installServiceProviderAfter('FortifyServiceProvider', 'JetstreamServiceProvider')
+            : ServiceProvider::addProviderToBootstrapFile('App\Providers\JetstreamServiceProvider');
 
         // Models...
         copy(__DIR__.'/../../stubs/app/Models/User.php', app_path('Models/User.php'));
@@ -107,8 +105,9 @@ trait InstallsSpladeStack
             ->name('*.blade.php')
         );
 
-        // Routes...
-        $this->replaceInFile('auth:api', 'auth:sanctum', base_path('routes/api.php'));
+        $legacyLaravelSkeleton
+            ? $this->replaceInFile('auth:api', 'auth:sanctum', base_path('routes/api.php'))
+            : $this->callSilent('install:api', ['--without-migration-prompt' => true]);
 
         copy($spladeJetstreamStubsDir.'routes/web.php', base_path('routes/web.php'));
 
