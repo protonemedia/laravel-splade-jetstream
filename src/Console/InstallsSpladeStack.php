@@ -107,7 +107,7 @@ trait InstallsSpladeStack
 
         $legacyLaravelSkeleton
             ? $this->replaceInFile('auth:api', 'auth:sanctum', base_path('routes/api.php'))
-            : $this->call('install:api');
+            : $this->callSilent('install:api', ['--without-migration-prompt' => true]);
 
         copy($spladeJetstreamStubsDir.'routes/web.php', base_path('routes/web.php'));
 
